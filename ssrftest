@@ -1,0 +1,23 @@
+# ssrf_test.py
+import requests
+
+def main():
+    # AWS EC2 metadata URL
+    aws_metadata_url = "http://169.254.169.254/latest/meta-data/"
+    
+    # Try to fetch metadata
+    try:
+        response = requests.get(aws_metadata_url, timeout=5)
+        if response.status_code == 200:
+            with open("aws_metadata.txt", "w") as f:
+                f.write("AWS Metadata fetched successfully:\n")
+                f.write(response.text)
+        else:
+            with open("aws_metadata_error.txt", "w") as f:
+                f.write(f"Failed to fetch AWS Metadata. Status Code: {response.status_code}\n")
+    except Exception as e:
+        with open("ssrf_error.txt", "w") as f:
+            f.write(f"SSRF Test Error: {str(e)}\n")
+
+if __name__ == "__main__":
+    main()
